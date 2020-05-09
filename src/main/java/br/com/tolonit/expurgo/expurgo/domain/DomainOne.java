@@ -29,6 +29,8 @@ public class DomainOne {
     }
 
     public Integer getValidityDays() {
+        if (this.validityDays == null)
+            return 1000;
         return validityDays;
     }
 }

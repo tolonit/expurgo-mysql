@@ -30,23 +30,33 @@ public class ExpurgoController {
     @Transactional
     public String apagaMassa() {
 
-        domainOneRepository.findAll().stream().forEach(domainOne -> {
+        domainOneRepository
+                .findAll()
+                .stream()
+                .filter(item -> item.getValidityDays() != null)
+                .forEach(domainOne -> {
 
-            try {
-                domainThreeRepository.excluirEntries(
-                        domainOne.getId(),
-                        Date.from(LocalDateTime.now().minusDays(domainOne.getValidityDays()).atZone(
-                                ZoneId.systemDefault()).toInstant()
-                        )
-                );
+                    try {
+                        System.out.println(domainOne.getName() + " - domainThree excluidos: " +
+                                domainThreeRepository.excluirEntries(
+                                        domainOne.getId(),
+                                        Date.from(LocalDateTime.now().minusDays(domainOne.getValidityDays()).atZone(
+                                                ZoneId.systemDefault()).toInstant())
+                                )
+                        );
 
+                        System.out.println(domainOne.getName() + " - domainTwo excluidos: " +
+                                domainTwoRepository.excluirEntries(
+                                        domainOne.getId(),
+                                        Date.from(LocalDateTime.now().minusDays(domainOne.getValidityDays()).atZone(
+                                                ZoneId.systemDefault()).toInstant())
+                                ));
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-
-        });
+                });
 
 
         return "OK";

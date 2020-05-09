@@ -18,5 +18,5 @@ public interface DomainThreeRepository extends JpaRepository<DomainThree, String
             "where domain_three.id_domain_two = domain_two.id " +
             "and domain_two.id_domain_one = :id " +
             "and domain_two.creation_date_time < :data ", nativeQuery = true)
-    void excluirEntries(@Param("id") Integer id, @Param("data") Date parse);
+    Integer excluirEntries(@Param("id") Integer id, @Param("data") Date parse);
 }
