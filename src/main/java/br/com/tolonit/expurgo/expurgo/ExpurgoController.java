@@ -34,32 +34,31 @@ public class ExpurgoController {
                 .findAll()
                 .stream()
                 .filter(item -> item.getValidityDays() != null)
-                .forEach(domainOne -> {
-
-                    try {
-                        System.out.println(domainOne.getName() + " - domainThree excluidos: " +
-                                domainThreeRepository.excluirEntries(
-                                        domainOne.getId(),
-                                        Date.from(LocalDateTime.now().minusDays(domainOne.getValidityDays()).atZone(
-                                                ZoneId.systemDefault()).toInstant())
-                                )
-                        );
-
-                        System.out.println(domainOne.getName() + " - domainTwo excluidos: " +
-                                domainTwoRepository.excluirEntries(
-                                        domainOne.getId(),
-                                        Date.from(LocalDateTime.now().minusDays(domainOne.getValidityDays()).atZone(
-                                                ZoneId.systemDefault()).toInstant())
-                                ));
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                });
-
+                .forEach(this::excluirBases);
 
         return "OK";
+    }
+
+    private void excluirBases(DomainOne domainOne) {
+        try {
+            System.out.println(domainOne.getName() + " - domainThree excluidos: " +
+                    domainThreeRepository.excluirEntries(
+                            domainOne.getId(),
+                            Date.from(LocalDateTime.now().minusDays(domainOne.getValidityDays()).atZone(
+                                    ZoneId.systemDefault()).toInstant())
+                    )
+            );
+
+            System.out.println(domainOne.getName() + " - domainTwo excluidos: " +
+                    domainTwoRepository.excluirEntries(
+                            domainOne.getId(),
+                            Date.from(LocalDateTime.now().minusDays(domainOne.getValidityDays()).atZone(
+                                    ZoneId.systemDefault()).toInstant())
+                    ));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
